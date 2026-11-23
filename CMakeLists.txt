@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(OpenCV REQUIRED)
 
+message(STATUS "=== OpenCV_LIBS: ${OpenCV_LIBS} ===")
+
 file(GLOB lib_src
 	CMAKE_CONFIGURE_DEPENDS "src/*.cpp"
 )
@@ -30,4 +32,5 @@ add_executable (${PROJECT_NAME} main.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
 	${PROJECT_NAME}_lib
+	${OpenCV_LIBS}
 )
