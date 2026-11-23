@@ -1,0 +1,25 @@
+# Папки сборки CMake и скомпилированные файлы
+out/
+build/
+cmake-build-*/
+*.exe
+*.obj
+*.o
+*.dll
+*.lib
+*.pdb
+
+# Служебные файлы Visual Studio 
+.vs/
+*.user
+*.suo
+*.sln
+*.vcxproj*
+
+# Системные файлы Windows
+Thumbs.db
+Desktop.ini
+
+# Локальные настройки CMake для Visual Studio
+CMakeSettings.json
+CMakeUserPresets.json
