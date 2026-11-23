@@ -10,19 +10,31 @@ CoinDetector::CoinDetector(double dp, double minDist,
 }
 
 std::vector<Coin> CoinDetector::detect(const cv::Mat& image) {
+	cv::Mat img;
+
+	int targetWidth = 1000;
+
+	double scale = static_cast<double>(targetWidth) / image.cols;
+	cv::resize(image, img, cv::Size(), scale, scale);
+	
+
 	cv::Mat gray, blurred;
-	cv::cvtColor(image, gray, cv::COLOR_BGR2GRAY);
-	cv::GaussianBlur(gray, blurred, cv::Size(5, 5), 1.5);
+	cv::cvtColor(img, gray, cv::COLOR_BGR2GRAY);
+	cv::medianBlur(gray, blurred, 7);
+
+	int minRadius = img.cols * 0.02;
+	int maxRadius = img.cols * 0.15;
 
 	std::vector<cv::Vec3f> circles;
-	cv::HoughCircles(blurred, circles, cv::HOUGH_GRADIENT, dp_,
-					  minDist_, param1_, param2_, minRadius_, maxRadius_);
+	cv::HoughCircles(blurred, circles, cv::HOUGH_GRADIENT, 1,
+					  minRadius * 2.0, 100, 70, minRadius, maxRadius);
 
 	std::vector<Coin> result;
 	result.reserve(circles.size());
 
+	double invScale = 1.0 / scale;
 	for (const auto& c: circles) {
-		result.emplace_back(c[0], c[1], c[2]);
+		result.emplace_back(c[0] * invScale, c[1] * invScale, c[2] * invScale);
 	}
 	
 	return result;
